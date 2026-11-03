@@ -59,23 +59,19 @@ evaluation is interrupted, start the same command again and it resumes.
 
 ## Models
 
-The models are set in `config/models.toml`. The default lineup is 13 models, each with the reasoning effort from the
-reference leaderboard:
+The models are set in `config/models.toml`. The default lineup is 6 models:
 
-| Lab | Models |
-|---|---|
-| Anthropic | Claude Opus 5.5, Sonnet 5.5, Fable 5.1, Haiku 5.5 (max) |
-| OpenAI | GPT-6 Astra, GPT-6.1 Sol, GPT-6.1 Terra (max) |
-| Meta | Muse Wonder (max) |
-| Moonshot | Kimi K3.1 Pro (high) |
-| xAI | Grok 4.7 (xhigh) |
-| Qwen | Qwen3.8 Max 0902 (high) |
-| DeepSeek | DeepSeek V4.1 Flash 1017 (max) |
-| Z.ai | GLM-5.3 (max) |
+| Model | OpenRouter slug | Reasoning effort |
+|---|---|---|
+| GPT-6.1 Sol | `openai/gpt-6.1-sol` | max |
+| DeepSeek V4.1 Flash 1017 | `deepseek/deepseek-v4.1-flash-1017` | max |
+| Kimi K3.1 Pro | `moonshotai/kimi-k3.1-pro` | high |
+| Muse Wonder | `meta/muse-wonder` | max |
+| Claude Opus 5.5 | `anthropic/claude-opus-5.5` | max |
+| Claude Sonnet 5.5 | `anthropic/claude-sonnet-5.5` | max |
 
-Some providers may reject "max" or "xhigh". In that case the run falls back to "high", and the leaderboard shows the
-effort that was actually used. Gemini 4 Carbon is not on OpenRouter yet; it is commented out in the config. Run one
-model with `python -m weight_space_bench run claude-opus-5.5`.
+Some providers may reject "max". In that case the run falls back to "high", and the leaderboard shows the effort that
+was actually used. Run one model with `python -m weight_space_bench run claude-opus-5.5`.
 
 To add a model, add another `[[model]]` block.
 
