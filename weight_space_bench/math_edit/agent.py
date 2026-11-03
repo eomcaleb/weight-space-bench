@@ -15,10 +15,10 @@ import shutil
 import time
 from pathlib import Path
 
-from .config import ASSETS, MODEL_DIR, RESULTS, read_json, write_json
+from ..config import MATH_ASSETS, MODEL_DIR, MATH_RESULTS, read_json, write_json
 from .forward import ForwardError, ForwardTool
 from .kernel import Kernel
-from .llm import ContextTooLong, NotIsolated, OpenRouter
+from ..llm import ContextTooLong, NotIsolated, OpenRouter
 
 BLOCK = re.compile(r"```(python|forward)[^\n]*\n(.*?)```", re.S)
 SYSTEM = "Answer the user's request."          # the paper's instructions file, verbatim
@@ -37,18 +37,18 @@ def settings_hash(cfg):
 
 
 def task_text(cfg):
-    t = (ASSETS / "task_template.txt").read_text(encoding="utf-8").replace("{BUDGET}", str(cfg["task"]["forward_passes"]))
+    t = (MATH_ASSETS / "task_template.txt").read_text(encoding="utf-8").replace("{BUDGET}", str(cfg["task"]["forward_passes"]))
     t = t.replace("You may run code up to 300 times", f"You may run code up to {cfg['task']['python_runs']} times")
     if not cfg["task"]["explain_every_step"]:
         t = re.sub(r"\nEXPLAIN EVERY STEP\..*?\n\n", "\n\n", t, flags=re.S)
-    notes = (ASSETS / "task_notes.txt").read_text(encoding="utf-8")
+    notes = (MATH_ASSETS / "task_notes.txt").read_text(encoding="utf-8")
     return t.rstrip() + "\n\n" + notes.rstrip()
 
 
 class Session:
     def __init__(self, model_cfg, cfg, run_dir=None):
         self.m, self.cfg = model_cfg, cfg
-        self.dir = Path(run_dir or RESULTS / model_cfg["name"])
+        self.dir = Path(run_dir or MATH_RESULTS / model_cfg["name"])
         self.work = self.dir / "work"
         self.work.mkdir(parents=True, exist_ok=True)
         self.llm = OpenRouter(model_cfg)

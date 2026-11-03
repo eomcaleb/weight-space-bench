@@ -15,7 +15,7 @@ from pathlib import Path
 
 from . import ckpt as CK
 from . import mathqa as Q
-from .config import BENCH_DIR, MODEL_DIR, write_json
+from ..config import BENCH_DIR, MODEL_DIR, write_json
 from .forward import run_worker
 
 SETS = ("math500", "gsm8k")

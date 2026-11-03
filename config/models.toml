@@ -1,54 +1,63 @@
-# Models to benchmark through OpenRouter (https://openrouter.ai/models). `name` is the run folder under results/.
-# Slugs checked against the OpenRouter catalogue on 2026-11-02.
-# reasoning_effort is sent as OpenRouter's `reasoning.effort`. If a provider rejects "max" or "xhigh", the client
-# falls back to "high" and records the effort actually used in the run's state.json and transcript.
+# Models to benchmark through OpenRouter (https://openrouter.ai/models). Slugs checked 2026-11-02.
+# name  = results folder;  label = name on the leaderboard;  group = lab (Anthropic / OpenAI get their own colors).
+#
+# Every model gets the same reasoning effort and output budget, so they are compared under the same conditions.
+# If a provider rejects an effort or the 64,000-token budget, the client falls back ("high" / 32,000 tokens) and
+# records what was actually used (shown on the leaderboard).
 
 [[model]]
 name = "gpt-6.1-sol"
+label = "GPT-6.1 Sol"
 slug = "openai/gpt-6.1-sol"
 group = "OpenAI"
-reasoning_effort = "max"
-max_output_tokens = 32000
+reasoning_effort = "high"
+max_output_tokens = 64000
 
 [[model]]
 name = "deepseek-v4.1-flash-1017"
+label = "DeepSeek V4.1 Flash"
 slug = "deepseek/deepseek-v4.1-flash-1017"
 group = "DeepSeek"
-reasoning_effort = "max"
-max_output_tokens = 32000
+reasoning_effort = "high"
+max_output_tokens = 64000
 
 [[model]]
 name = "kimi-k3.1-pro"
+label = "Kimi K3.1 Pro"
 slug = "moonshotai/kimi-k3.1-pro"
 group = "Moonshot"
 reasoning_effort = "high"
-max_output_tokens = 32000
+max_output_tokens = 64000
 
 [[model]]
 name = "muse-wonder"
+label = "Muse Wonder"
 slug = "meta/muse-wonder"
 group = "Meta"
-reasoning_effort = "max"
-max_output_tokens = 32000
+reasoning_effort = "high"
+max_output_tokens = 64000
 
 [[model]]
 name = "claude-opus-5.5"
+label = "Claude Opus 5.5"
 slug = "anthropic/claude-opus-5.5"
 group = "Anthropic"
-reasoning_effort = "max"
-max_output_tokens = 32000
+reasoning_effort = "high"
+max_output_tokens = 64000
 
 [[model]]
 name = "claude-sonnet-5.5"
+label = "Claude Sonnet 5.5"
 slug = "anthropic/claude-sonnet-5.5"
 group = "Anthropic"
-reasoning_effort = "max"
-max_output_tokens = 32000
+reasoning_effort = "high"
+max_output_tokens = 64000
 
 # To add a model, copy a block above with another OpenRouter slug, for example:
 # [[model]]
 # name = "gpt-6-astra"            # the model the paper used
+# label = "GPT-6 Astra"
 # slug = "openai/gpt-6-astra"
 # group = "OpenAI"
-# reasoning_effort = "max"
-# max_output_tokens = 32000
+# reasoning_effort = "high"
+# max_output_tokens = 64000

@@ -100,11 +100,14 @@ class OpenRouter:
                         if isinstance(text, list):
                             text = "".join(p.get("text", "") for p in text if isinstance(p, dict))
                         u = d.get("usage") or {}
-                        if not text.strip() and d["choices"][0].get("finish_reason") not in ("stop", "end_turn"):
-                            err = f"empty reply (finish_reason={d['choices'][0].get('finish_reason')})"
+                        fin = d["choices"][0].get("finish_reason")
+                        if not text.strip() and fin not in ("stop", "end_turn", "length", "max_tokens"):
+                            err = f"empty reply (finish_reason={fin})"
                         else:
+                            # an empty reply cut at the token limit is a real outcome (the model spent its budget
+                            # reasoning), not an API failure: it is returned, never re-bought
                             return {"text": text, "reasoning": msg.get("reasoning"), "usage": u, "audit": audit(d),
-                                    "effort": self.effort,
+                                    "effort": self.effort, "max_tokens": body["max_tokens"],
                                     "discarded_not_tool_free": dirty,
                                     "cost": float(u.get("cost") or 0.0), "finish": d["choices"][0].get("finish_reason"),
                                     "provider": d.get("provider"), "s": round(time.time() - t0, 1)}
@@ -117,6 +120,11 @@ class OpenRouter:
                         print(f"  [llm] effort {self.effort!r} rejected; falling back to 'high'", flush=True)
                         self.effort = "high"
                         body["reasoning"] = {"effort": "high"}
+                        continue
+                    if (r.status_code in (400, 422) and body["max_tokens"] > 32000
+                            and any(s in low for s in ("max_tokens", "max tokens", "max_output", "output tokens"))):
+                        print(f"  [llm] max_tokens {body['max_tokens']} rejected; using 32000", flush=True)
+                        body["max_tokens"] = 32000
                         continue
                     if r.status_code in (400, 413) and any(s in low for s in ("context", "too long", "maximum", "tokens")):
                         raise ContextTooLong(err)

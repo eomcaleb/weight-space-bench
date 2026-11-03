@@ -10,4 +10,4 @@ exec docker run --rm -it --gpus all --ipc=host \
   -e OPENROUTER_API_KEY -e HF_TOKEN -e WSB_DATA -e WSB_RESULTS \
   -e HF_HOME="$HERE/data/hf_cache" \
   --user "$(id -u):$(id -g)" --group-add "$(stat -c %g /var/run/docker.sock)" \
-  weight-space-bench-gpu:latest python -m weight_space_bench "$@"
+  weight-space-bench-gpu:latest python -m weight_space_bench math-edit "$@"

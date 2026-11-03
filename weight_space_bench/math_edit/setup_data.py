@@ -14,7 +14,7 @@ from pathlib import Path
 import numpy as np
 
 from . import st_numpy as S
-from .config import ASSETS, BENCH_DIR, MODEL_DIR, PRACTICE_DIR, QWEN_REPO, QWEN_REV
+from ..config import MATH_ASSETS, BENCH_DIR, MODEL_DIR, PRACTICE_DIR, QWEN_REPO, QWEN_REV
 
 HF = f"https://huggingface.co/{QWEN_REPO}/resolve/{QWEN_REV}"
 WEIGHTS_FILE = "model.safetensors-00001-of-00001.safetensors"
@@ -55,10 +55,10 @@ def setup_model(cache):
         S.save(out, text, {"format": "pt"})
         print(f"wrote {out} ({len(text)} tensors)")
     for f in ("config.json", "generation_config.json", "tokenizer_config.json", "chat_template.jinja"):
-        shutil.copyfile(ASSETS / "qwen35_text" / f, MODEL_DIR / f)
+        shutil.copyfile(MATH_ASSETS / "qwen35_text" / f, MODEL_DIR / f)
     _download(f"{HF}/tokenizer.json", MODEL_DIR / "tokenizer.json")
     # integrity: the tensors the paper's edits were made on must match bit for bit
-    want = json.load(open(ASSETS / "base_sha256.json"))
+    want = json.load(open(MATH_ASSETS / "base_sha256.json"))
     got = S.load(out, set(want))
     bad = [n for n, h in want.items() if hashlib.sha256(np.ascontiguousarray(got[n][1]).tobytes()).hexdigest() != h]
     assert not bad, f"base tensors differ from the paper's: {bad[:3]}"
@@ -67,7 +67,7 @@ def setup_model(cache):
 
 def setup_practice():
     PRACTICE_DIR.mkdir(parents=True, exist_ok=True)
-    for f in (ASSETS / "practice").iterdir():
+    for f in (MATH_ASSETS / "practice").iterdir():
         shutil.copyfile(f, PRACTICE_DIR / f.name)
     print(f"practice problems -> {PRACTICE_DIR}")
 

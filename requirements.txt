@@ -1,14 +1,5 @@
-# Driver, forward-pass tool and evaluation (Linux + NVIDIA GPU). vLLM brings torch and transformers;
-# it must support Qwen3.5 (Qwen3_5ForCausalLM). The paper's config was written by transformers 5.17.0.
-vllm
-transformers>=5.17.0
-safetensors
+# Test 1 (the leaderboard): write MinAtar networks from scratch. CPU only.
 numpy
 requests
-datasets
-math-verify[antlr4_13_2]==0.9.0
-latex2sympy2_extended==1.11.0
-antlr4-python3-runtime==4.13.2
-# Fast kernels for the gated DeltaNet layers in transformers (teacher-forced passes); optional but much faster:
-# flash-linear-attention
-# causal-conv1d
+matplotlib
+MinAtar==1.0.15

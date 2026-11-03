@@ -1,9 +1,9 @@
 """GPU work, always in a fresh subprocess (a vLLM engine does not release the GPU reliably in-process):
 
-  python -m weight_space_bench.gpu_worker generate <job.json>   vLLM sampling; appends one JSON line per sample to job["out"]
+  python -m weight_space_bench.math_edit.gpu_worker generate <job.json>   vLLM sampling; appends one JSON line per sample to job["out"]
                                                         and skips keys already there (so evaluations resume)
-  python -m weight_space_bench.gpu_worker acts <job.json>       transformers: residual stream / MLP inputs of generated answers
-  python -m weight_space_bench.gpu_worker tf <job.json>         transformers: a teacher-forced read (log-probs, top-k, hidden
+  python -m weight_space_bench.math_edit.gpu_worker acts <job.json>       transformers: residual stream / MLP inputs of generated answers
+  python -m weight_space_bench.math_edit.gpu_worker tf <job.json>         transformers: a teacher-forced read (log-probs, top-k, hidden
                                                         states, MLP activations, attention probabilities)
 A failure writes {"error": "..."} to job["status"] and exits 2.
 """

@@ -13,7 +13,7 @@ from pathlib import Path
 
 from . import ckpt as CK
 from . import mathqa as Q
-from .config import MODEL_DIR, PRACTICE_DIR, ROOT
+from ..config import MODEL_DIR, PRACTICE_DIR, ROOT
 
 
 class ForwardError(Exception):
@@ -29,7 +29,7 @@ def run_worker(cmd, job, job_path, log_path):
     job["status"] = str(job_path.with_suffix(".status.json"))
     job_path.write_text(json.dumps(job), encoding="utf-8")
     with open(log_path, "a", encoding="utf-8") as log:
-        p = subprocess.run([sys.executable, "-m", "weight_space_bench.gpu_worker", cmd, str(job_path)], cwd=str(ROOT),
+        p = subprocess.run([sys.executable, "-m", "weight_space_bench.math_edit.gpu_worker", cmd, str(job_path)], cwd=str(ROOT),
                            stdout=log, stderr=subprocess.STDOUT)
     try:
         st = json.loads(Path(job["status"]).read_text(encoding="utf-8"))

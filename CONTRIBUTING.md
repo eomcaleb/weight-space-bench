@@ -4,30 +4,32 @@ Contributions are welcome: bug fixes, new models, results, and new tests.
 
 ## Ground rules
 
-- **Keep runs comparable.** Anything that changes what the editing model sees or can do (the task text, budgets,
-  sandbox limits, the forward-pass tool, sampling, evaluation) changes the benchmark. Such changes need a new
-  benchmark version and a note in the README. The settings hash in each run's `state.json` makes the change visible.
-- **Keep the editing model isolated.** It must have no tools other than the ```python and ```forward blocks the
-  harness runs. That means no web search, no plugins and no network in the kernel.
+- **Keep runs comparable.** Anything that changes what a model sees or how it is scored changes the benchmark. That
+  includes the prompts, the system message, the number of attempts, the episodes, the seeds and the edits reader.
+  Such changes need a new benchmark version and a note in the README. The settings hash in each run's `run.json`
+  makes the change visible, and the leaderboard ranks only runs with the current hash.
+- **Keep models isolated.** A model gets no tools: no web search, no plugins, no code execution. It answers in one
+  reply.
 - **Keep it simple.** Small, readable changes are best. Explain the reason in the pull request.
 
 ## Ways to help
 
-- **Add a model.** Add a `[[model]]` block to `config/models.toml` with an OpenRouter slug that you have checked.
-- **Submit results.** Open a pull request with your run's `results/<model>/state.json`, `final_answer.md`,
-  `submission/` manifest and `eval/<profile>/scores.json`. Include your GPU, vLLM version and the settings hash.
-  Please also include the `reference` score for your machine, which shows that your evaluation reproduces the paper.
-- **Add a test.** See "Future benchmarks" in the README. Put each new test in its own module with its own README.
+- **Add a model.** Add a `[[model]]` block to `config/models.toml` with an OpenRouter slug you have checked.
+- **Submit results.** Open a pull request with your `results/minatar/<model>/` folder (prompts, replies, networks,
+  scores). Include the output of `python -m weight_space_bench reference` from your machine, which shows that your
+  scorer reproduces the paper.
+- **Add a test.** See "Future tests" in the README. Put each new test in its own subpackage (like `minatar/` and
+  `math_edit/`) with its own config file.
 - **Fix bugs.** Open an issue with the command, the error and your environment.
 
 ## Development
 
 ```bash
 pip install -r requirements.txt
-python -m weight_space_bench check      # needs Linux + an NVIDIA GPU
+python -m weight_space_bench reference     # scores the paper's networks: a quick end-to-end check of the scorer
 ```
 
-The kernel, agent loop, forward-tool validation and leaderboard can be tested without a GPU by faking the API and the
-GPU worker. The tests made during development did this.
+The run and leaderboard code can be tested without API calls by replacing `task.OpenRouter` with a fake client that
+returns saved replies (for example the paper's replies in `weight_space_bench/minatar/assets/reference/`).
 
 By contributing, you agree that your contributions are licensed under the MIT License of this repository.

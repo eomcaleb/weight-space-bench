@@ -9,7 +9,7 @@ from pathlib import Path
 import numpy as np
 
 from . import st_numpy as S
-from .config import FROZEN, MODEL_DIR
+from ..config import FROZEN, MODEL_DIR
 
 
 def edits_in(d):

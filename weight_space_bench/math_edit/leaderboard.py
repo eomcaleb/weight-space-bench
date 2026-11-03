@@ -7,14 +7,14 @@ import csv
 import json
 import math
 
-from .config import ASSETS, RESULTS, load_models, read_json
+from ..config import MATH_ASSETS, MATH_RESULTS, load_models, read_json
 
 SETS = ("math500", "gsm8k")
 BASELINE = "_unedited"
 
 
 def _per_problem_means(run, profile):
-    p = read_json(RESULTS / run / "eval" / profile / "per_problem.json")
+    p = read_json(MATH_RESULTS / run / "eval" / profile / "per_problem.json")
     return {s: {r["id"]: sum(r["correct"]) / len(r["correct"]) for r in p[s]} for s in p} if p else None
 
 
@@ -34,7 +34,7 @@ def build(profile="full"):
     groups = {m["name"]: m.get("group", "") for m in load_models()}
     base = _per_problem_means(BASELINE, profile)
     rows = []
-    for d in sorted(RESULTS.iterdir()) if RESULTS.exists() else []:
+    for d in sorted(MATH_RESULTS.iterdir()) if MATH_RESULTS.exists() else []:
         sc = read_json(d / "eval" / profile / "scores.json")
         if not sc:
             continue
@@ -85,7 +85,7 @@ def render(rows, profile):
     if excluded:
         out += ["", "Not ranked:", ""] + [f"- {r['run']}: {r['excluded']} (score {pct(r['score'])})" for r in excluded]
     if profile == "full":
-        ref = json.load(open(ASSETS / "reference" / "paper_results.json"))
+        ref = json.load(open(MATH_ASSETS / "reference" / "paper_results.json"))
         out += ["", "Published numbers (the paper, GPT-6 Astra, same protocol, their hardware):", "",
                 "| run | MATH-500 | GSM8K | score |", "|---|---|---|---|"]
         for k, label in (("unedited", "unedited"), ("p10c", "Astra, 10 passes"), ("p25c", "Astra, 25 passes"),
@@ -98,9 +98,9 @@ def render(rows, profile):
 def main(profile="full"):
     rows = build(profile)
     md = render(rows, profile)
-    RESULTS.mkdir(parents=True, exist_ok=True)
-    (RESULTS / f"leaderboard_{profile}.md").write_text(md, encoding="utf-8")
-    with open(RESULTS / f"leaderboard_{profile}.csv", "w", newline="", encoding="utf-8") as f:
+    MATH_RESULTS.mkdir(parents=True, exist_ok=True)
+    (MATH_RESULTS / f"leaderboard_{profile}.md").write_text(md, encoding="utf-8")
+    with open(MATH_RESULTS / f"leaderboard_{profile}.csv", "w", newline="", encoding="utf-8") as f:
         keys = ["run", "group", "effort", "math500", "gsm8k", "score", "delta", "delta_se", "cut_share", "passes", "turns",
                 "tensors", "cost_usd", "ended", "excluded"]
         w = csv.DictWriter(f, fieldnames=keys, extrasaction="ignore")

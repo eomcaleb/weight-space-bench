@@ -17,7 +17,7 @@ import time
 import uuid
 from pathlib import Path
 
-from .config import MODEL_DIR, PRACTICE_DIR
+from ..config import MODEL_DIR, PRACTICE_DIR
 
 SERVER = Path(__file__).resolve().parent / "kernel_server.py"
 

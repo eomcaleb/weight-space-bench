@@ -1,0 +1,22 @@
+# weight-space-bench, test 1: write MinAtar policy networks from scratch (Experiment 5 of the paper).
+# Change these only between benchmark versions: every model on one leaderboard must use the same values.
+
+[task]
+games = ["breakout", "seaquest", "asterix"]
+attempts = 3                 # independent replies per game and model (fresh conversation each); scores are averaged
+concurrency = 6              # API calls in flight at once (does not change results)
+
+[eval]
+# As in the paper: mean score over 1,000 episodes of the official MinAtar 1.0.15 game, actions sampled from the
+# softmax of the logits, sticky actions 0.1, difficulty ramping on, episodes cut at 10,000 steps.
+episodes = 1000
+max_steps = 10000
+seed = 0                     # episode i uses seed `seed + i`: the same episode stream for every network
+workers = 0                  # CPU processes for scoring (0 = all cores but one; does not change results)
+
+[reference]
+# PPO baselines from the paper's released evaluation (best seed; same 600-32-32-6 network, same scoring).
+# 1.0 on the normalized scale = the best PPO network trained for 500M steps.
+ppo500 = { breakout = 25.344, seaquest = 88.884, asterix = 55.204 }
+ppo100 = { breakout = 15.779, seaquest = 5.617, asterix = 25.82 }
+astra = { breakout = 517.411, seaquest = 53.11, asterix = 53.178 }   # GPT-6 Astra, one-shot (the paper)
