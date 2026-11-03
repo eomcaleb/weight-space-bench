@@ -87,9 +87,7 @@ def apply(text, net=None):
     block, cut = last_block(text)
     rep = {"block": block is not None, "statements": 0, "applied": 0, "entries_written": 0, "errors": [],
            "cut_off": cut}
-    if block is None:
-        return net, rep
-    for st in statements(block):
+    for st in (statements(block) if block is not None else []):
         rep["statements"] += 1
         try:
             m = STMT.match(st)

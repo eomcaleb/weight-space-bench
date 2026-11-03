@@ -1,0 +1,7 @@
+rank,model,lab,score,breakout_raw,breakout_best,breakout_norm,seaquest_raw,seaquest_best,seaquest_norm,asterix_raw,asterix_best,asterix_norm,effort,cost_usd,replies,in_tokens,out_tokens,excluded
+1,GPT-6.1 Sol,OpenAI,86.46,457.893,473.974,18.4422,11.824,18.022,0.1321,47.798,64.867,0.8646,high,2.2497,9,29763,222285,
+2,Claude Opus 5.5,Anthropic,48.52,17.532,40.829,0.685,2.907,8.535,0.0317,27.038,31.363,0.4852,high,8.3177,9,43473,406898,
+3,Claude Sonnet 5.5,Anthropic,23.17,6.565,7.389,0.2427,1.03,1.263,0.0106,13.167,29.46,0.2317,high,2.2818,9,43473,219195,
+4,Kimi K3.1 Pro,Moonshot,16.15,6.81,8.532,0.2526,0.292,0.643,0.0022,9.329,22.273,0.1615,high,2.2887,9,30543,222761,
+5,Muse Wonder,Meta,2.57,7.404,11.179,0.2766,0.644,0.884,0.0062,1.899,2.138,0.0257,high,3.4872,9,29811,170266,
+6,DeepSeek V4.1 Flash,DeepSeek,0.75,0.73,1.1,0.0075,0.173,0.429,0.0009,1.822,3.097,0.0243,high,0.3559,9,31269,495391,

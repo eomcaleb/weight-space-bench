@@ -15,6 +15,37 @@ The network it writes is then played on the real game and scored.
 In the paper, GPT-6 Astra's one-shot networks scored **517.4 / 53.1 / 53.2**. PPO trained for 500M steps scored
 25.3 / 88.9 / 55.2.
 
+## Results (2026-11-03)
+
+![Performance](leaderboard/leaderboard_performance.png)
+
+| # | Model | Score | Breakout | Seaquest | Asterix | API cost |
+|---|---|---|---|---|---|---|
+| 1 | GPT-6.1 Sol | **86.5** | 457.9 | 11.8 | 47.8 | $2.25 |
+| 2 | Claude Opus 5.5 | **48.5** | 17.5 | 2.9 | 27.0 | $8.32 |
+| 3 | Claude Sonnet 5.5 | **23.2** | 6.6 | 1.0 | 13.2 | $2.28 |
+| 4 | Kimi K3.1 Pro | **16.2** | 6.8 | 0.3 | 9.3 | $2.29 |
+| 5 | Muse Wonder | **2.6** | 7.4 | 0.6 | 1.9 | $3.49 |
+| 6 | DeepSeek V4.1 Flash | **0.7** | 0.7 | 0.2 | 1.8 | $0.36 |
+| | *GPT-6 Astra (paper, 1 attempt)* | *96.3* | *517.4* | *53.1* | *53.2* | |
+| | *PPO, 500M steps* | *100.0* | *25.3* | *88.9* | *55.2* | |
+| | *PPO, 100M steps* | *46.3* | *15.8* | *5.6* | *25.8* | |
+
+Game columns are raw scores: the mean over 3 attempts × 1,000 episodes. The score is defined under "How it's scored"
+below. Total API cost for all six models was about $19. Full table: [`leaderboard/leaderboard.md`](leaderboard/leaderboard.md).
+
+Highlights:
+
+- **GPT-6.1 Sol's Breakout networks scored about 18× PPO-500M:** 449.7, 450.0 and 474.0, close to Astra's 517.4.
+- **Sol's best Asterix network beat PPO-500M:** 64.9 against 55.2.
+- **Seaquest was hard for every model.** The best result was Sol's 18.0, about 20% of PPO-500M.
+- **Claude Opus 5.5 ran out of its 64k-token budget on 2 of 9 attempts** before writing any weights. Those attempts
+  count as all-zero networks.
+
+| Cost | Tokens |
+|---|---|
+| ![Cost](leaderboard/leaderboard_cost.png) | ![Tokens](leaderboard/leaderboard_tokens.png) |
+
 ## How it's scored
 
 1. **Prompt.** Each model gets the paper's exact prompt for each game, in a fresh conversation with the paper's
@@ -66,9 +97,11 @@ If a run is interrupted, run the same command again. It resumes, and saved repli
 
 The leaderboard is written to `results/minatar/`:
 
-- `leaderboard.png`: the bar chart;
-- `leaderboard.md`: per-game raw and normalized scores;
+- `leaderboard_performance.png`, `leaderboard_cost.png`, `leaderboard_tokens.png`: the three charts;
+- `leaderboard.md`: per-game raw and normalized scores, cost and tokens;
 - `leaderboard.csv`.
+
+The published copy of the latest results is in [`leaderboard/`](leaderboard/).
 
 ## Models
 
@@ -85,10 +118,11 @@ The models are listed in `config/models.toml`. To add one, add a `[[model]]` blo
 
 ## Cost and time
 
-- **API:** each reply is a prompt of about 5k tokens and about 15–35k output tokens. That comes to about
-  **$0.10–7 per model** and roughly **$15–25 for all six**.
-- **Time:** with 6 calls in parallel, a full run of six models takes about 1–2 hours. Most of that is waiting for
-  replies; scoring takes minutes on a multi-core CPU.
+- **API:** each reply is a prompt of about 3–5k tokens plus 19–55k output tokens, depending on the model. The
+  2026-11-03 run cost **$0.36–8.32 per model** and **about $19 for all six**.
+- **Time:** that run took about 1.5 hours with all six models in parallel. Most of it was waiting for replies: a
+  reply took 1.5–20 minutes depending on the model. Scoring takes a few minutes per model on a multi-core CPU, longer
+  when a network plays very long games (strong Breakout policies).
 
 ## Future tests
 
