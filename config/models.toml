@@ -1,0 +1,108 @@
+# Models to benchmark through OpenRouter (https://openrouter.ai/models). `name` is the run folder under results/.
+#
+# Default lineup: the models of the reference leaderboard screenshot (2026-11-02), with the reasoning effort it lists
+# for each. Slugs checked against the OpenRouter catalogue on 2026-11-02.
+# reasoning_effort is sent as OpenRouter's `reasoning.effort`. If a provider rejects "max" or "xhigh", the client
+# falls back to "high" and records the effort actually used in the run's state.json and transcript.
+
+[[model]]
+name = "claude-opus-5.5"
+slug = "anthropic/claude-opus-5.5"
+group = "Anthropic"
+reasoning_effort = "max"
+max_output_tokens = 32000
+
+[[model]]
+name = "gpt-6-astra"
+slug = "openai/gpt-6-astra"
+group = "OpenAI"
+reasoning_effort = "max"
+max_output_tokens = 32000
+
+[[model]]
+name = "gpt-6.1-sol"
+slug = "openai/gpt-6.1-sol"
+group = "OpenAI"
+reasoning_effort = "max"
+max_output_tokens = 32000
+
+[[model]]
+name = "claude-sonnet-5.5"
+slug = "anthropic/claude-sonnet-5.5"
+group = "Anthropic"
+reasoning_effort = "max"
+max_output_tokens = 32000
+
+[[model]]
+name = "gpt-6.1-terra"
+slug = "openai/gpt-6.1-terra"
+group = "OpenAI"
+reasoning_effort = "max"
+max_output_tokens = 32000
+
+[[model]]
+name = "muse-wonder"
+slug = "meta/muse-wonder"
+group = "Meta"
+reasoning_effort = "max"
+max_output_tokens = 32000
+
+[[model]]
+name = "claude-fable-5.1"
+slug = "anthropic/claude-fable-5.1"
+group = "Anthropic"
+reasoning_effort = "max"
+max_output_tokens = 32000
+
+[[model]]
+name = "kimi-k3.1-pro"
+slug = "moonshotai/kimi-k3.1-pro"
+group = "Moonshot"
+reasoning_effort = "high"
+max_output_tokens = 32000
+
+[[model]]
+name = "claude-haiku-5.5"
+slug = "anthropic/claude-haiku-5.5"
+group = "Anthropic"
+reasoning_effort = "max"
+max_output_tokens = 32000
+
+[[model]]
+name = "grok-4.7"
+slug = "x-ai/grok-4.7"
+group = "xAI"
+reasoning_effort = "xhigh"
+max_output_tokens = 32000
+
+[[model]]
+name = "qwen3.8-max-0902"
+slug = "qwen/qwen3.8-max-0902"
+group = "Qwen"
+reasoning_effort = "high"
+max_output_tokens = 32000
+
+[[model]]
+name = "deepseek-v4.1-flash-1017"
+slug = "deepseek/deepseek-v4.1-flash-1017"
+group = "DeepSeek"
+reasoning_effort = "max"
+max_output_tokens = 32000
+
+[[model]]
+name = "glm-5.3"
+slug = "z-ai/glm-5.3"
+group = "Z.ai"
+reasoning_effort = "max"
+max_output_tokens = 32000
+
+# Not runnable yet:
+# - Gemini 4 Carbon (high): not on OpenRouter on 2026-11-02 (only google/gemini-4-argon is). Add it when listed:
+# [[model]]
+# name = "gemini-4-carbon"
+# slug = "google/gemini-4-carbon"
+# group = "Google"
+# reasoning_effort = "high"
+# max_output_tokens = 32000
+# - "Muse Wonder Full (max)": OpenRouter has a single meta/muse-wonder slug, run above.
+# - The last bar of the screenshot ("Gemini ... Flash") is cut off; add it once the exact model is known.

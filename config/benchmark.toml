@@ -1,0 +1,50 @@
+# weight-space-bench: settings shared by every model.
+# Change these only between benchmark *versions*: every model in one leaderboard must use the same values.
+
+[task]
+# Forward-pass budget given to the editing model (the paper ran 10, 25 and 50; 10 is cheapest and is the default).
+forward_passes = 10
+python_runs = 300                # code executions allowed (paper: 300)
+handoff_every = 40               # start a fresh conversation every N replies (paper: 40); the kernel keeps running
+explain_every_step = true        # the "EXPLAIN EVERY STEP" rule (in the task from turn 1, as in the final prompt)
+max_turns = 600                  # hard stop on replies (safety net; the paper's longest run had 158)
+max_cost_usd = 150.0             # hard stop on API spend per run (the run then asks for a final answer)
+
+[kernel]
+# "docker": the Python kernel runs in a container with no network (recommended).
+# "local":  a subprocess on this machine (network blocked with `unshare -rn` when available). Use inside a VM/container.
+mode = "docker"
+image = "weight-space-bench-kernel:latest"
+timeout_s = 900                  # per code run (paper: 900)
+memory = "24g"                   # paper: 96 GB; set what your machine has
+cpus = 8
+output_chars = 10000             # output cut (paper: 10,000)
+
+[forward]
+# The forward-pass tool runs Qwen3.5-0.8B on the local GPU (vLLM for generation, transformers for teacher-forced reads).
+gpu_memory_utilization = 0.80
+gen_max_items = 512              # generations per pass (paper: 512; 256 per model with "both")
+tf_max_texts = 1024
+tf_max_tokens = 32768
+tf_total_tokens = 524288
+tf_max_gb = 6.0
+act_max_tokens = 8192
+
+[sampling]
+# The fixed evaluation protocol (paper: think35). The editing model is told these exact values.
+temperature = 0.6
+top_p = 0.95
+top_k = 20
+presence_penalty = 1.5
+max_tokens = 32768
+enable_thinking = true
+
+[eval.full]
+# The paper's protocol: comparable to the published numbers (unedited 7.9 / 13.8; Astra 50 passes 48.1 / 67.1).
+math500 = { samples = 4 }
+gsm8k = { samples = 2 }
+
+[eval.quick]
+# A cheaper screen: about a quarter of the tokens. Not comparable to the paper; compare only quick vs quick.
+math500 = { samples = 1 }
+gsm8k = { samples = 1, limit = 500 }
